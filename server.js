@@ -15,5 +15,12 @@ app.use(cookieParser());
 app.use("/api/coupons", require("./routes/couponRoutes"));
 app.use("/api/coupons", require("./routes/addCoupon"));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Check if running on Vercel (Serverless) or locally
+if (process.env.VERCEL) {
+  const serverless = require("serverless-http");
+  module.exports = app;
+  module.exports.handler = serverless(app);
+} else {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
