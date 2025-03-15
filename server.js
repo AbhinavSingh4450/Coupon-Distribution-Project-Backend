@@ -9,18 +9,14 @@ connectDB();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Update frontend URL when deployed
+    credentials: true
+}));
 app.use(cookieParser());
 
 app.use("/api/coupons", require("./routes/couponRoutes"));
 app.use("/api/coupons", require("./routes/addCoupon"));
 
-// Check if running on Vercel (Serverless) or locally
-if (process.env.VERCEL) {
-  const serverless = require("serverless-http");
-  module.exports = app;
-  module.exports.handler = serverless(app);
-} else {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
