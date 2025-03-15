@@ -26,7 +26,9 @@ app.use(
 
 
 app.use(cookieParser());
-
+app.get("/", (req, res) => {
+  res.send("All is Well!");
+});
 app.use("/api/coupons", require("./routes/couponRoutes"));
 app.use("/api/coupons", require("./routes/addCoupon"));
 
